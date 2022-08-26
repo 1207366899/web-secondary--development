@@ -285,15 +285,19 @@ export default {
       return colorTemp;
     },
     columnarColorOne() {
+      console.log(this?.options?.externalVariables?.渐变色2?.split(","), '===========');
+      console.log(this?.options?.externalVariables?.渐变色2, '===========');
       let colorTemp =
-        this?.options?.externalVariables?.渐变色1.split(",").length == 2
+        this?.options?.externalVariables?.渐变色1?.split(",").length == 2
           ? this?.options?.externalVariables?.渐变色1
           : "#386CA6,#377889";
       return colorTemp.split(",");
     },
     columnarColorTwo() {
+      console.log(this?.options?.externalVariables?.渐变色2?.split(","), '===========');
+      console.log(this?.options?.externalVariables?.渐变色2, '===========');
       let colorTemp =
-        this?.options?.externalVariables?.渐变色2.split(",").length == 2
+        this?.options?.externalVariables?.渐变色2?.split(",").length == 2
           ? this?.options?.externalVariables?.渐变色2
           : "#41AA8B,#24DED4";
       return colorTemp.split(",");
@@ -492,16 +496,16 @@ export default {
       this.options1.tooltip.formatter = function (params) {
         let res =
           "总电量: " +
-          (Number(params[0].data) + Number(params[1].data)) /
-          that.unitSystem.multiple.toFixed(that.unitSystem.places) +
+          ((Number(params[0].data) + Number(params[1].data)) /
+            that.unitSystem.multiple).toFixed(that.unitSystem.places) +
           "<br>" +
           "自发自用电量: " +
-          Number(params[0].data) /
-          that.unitSystem.multiple.toFixed(that.unitSystem.places) +
+          (Number(params[0].data) /
+            that.unitSystem.multiple).toFixed(that.unitSystem.places) +
           "<br>" +
           "上网电量: " +
-          Number(params[1].data) /
-          that.unitSystem.multiple.toFixed(that.unitSystem.places) +
+          (Number(params[1].data) /
+            that.unitSystem.multiple).toFixed(that.unitSystem.places) +
           "<br>";
 
         return (
@@ -530,7 +534,7 @@ export default {
         );
       };
     }
-    if (this.options?.externalVariables?.倍数 == '') {
+    if (this.options?.externalVariables?.倍数 === '' || this.options?.externalVariables?.倍数 === undefined) {
       this.options1.yAxis[0].name = '';
       this.options1.yAxis[0].axisLabel.formatter = function (a) {
         return [`{a|${a}}`];
@@ -672,7 +676,7 @@ export default {
         ret = ret + Number(arr[i]);
       }
       //求数组里的平均数：让求的和减去还剩下的个数，一开始是8个，上面减去了最小值和最大值还剩下6个，数组的长度就是6
-      var liang = ret / arr.length;
+      var liang = parseInt(ret / arr.length);
       return String(liang).length;
     },
     setYAxisMaxVal(arrayF, y, x) {
