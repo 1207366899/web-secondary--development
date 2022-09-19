@@ -29,7 +29,6 @@ const debounce = (func, ms) => {
   };
 };
 
-
 import { tsUnionType } from "@babel/types";
 import * as echarts from "echarts";
 import { TimePicker } from "element-ui";
@@ -302,7 +301,6 @@ export default {
       return colorTemp;
     },
     columnarColorOne() {
-
       let colorTemp =
         this?.options?.externalVariables?.渐变色1?.split(",").length == 2
           ? this?.options?.externalVariables?.渐变色1
@@ -310,7 +308,6 @@ export default {
       return colorTemp.split(",");
     },
     columnarColorTwo() {
-
       let colorTemp =
         this?.options?.externalVariables?.渐变色2?.split(",").length == 2
           ? this?.options?.externalVariables?.渐变色2
@@ -688,7 +685,6 @@ export default {
         actions,
       });
     this.updateProcess && this.updateProcess();
-
 
   },
   mounted() {
