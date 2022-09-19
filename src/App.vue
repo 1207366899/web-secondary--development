@@ -5,7 +5,7 @@
     position: 'relative'
   }" ref="analyzer">
     <div class="echarts" ref="echart"></div>
-    <div class='overDiv' v-show="showZ" :style="{ backgroundColor: color }"></div>
+    <div class='overDiv' ref="overDiv" v-show="showZ" :style="{ backgroundColor: color }"></div>
   </div>
 </template>
 
@@ -30,6 +30,7 @@ const debounce = (func, ms) => {
 };
 
 
+import { tsUnionType } from "@babel/types";
 import * as echarts from "echarts";
 import { TimePicker } from "element-ui";
 export default {
@@ -100,30 +101,14 @@ export default {
         },
         tooltip: {
           trigger: "axis",
-          backgroundColor: "rgba(75, 75, 75,0.7)",
+          backgroundColor: "rgba(240, 242, 245,0.7)",
           textStyle: {
-            color: "#fff", //字体颜色，
+            color: "#000", //字体颜色，
             fontSize: 13, //字体大小
           },
-          borderColor: "rgba(75, 75, 75,0.7)",
-          // formatter: function (params) {
-          //   let res =
-          //     "总电量: " +
-          //     (Number(params[0].data) + Number(params[1].data)) +
-          //     "<br>" +
-          //     "自发自用电量: " +
-          //     params[0].data +
-          //     "<br>" +
-          //     "上网电量: " +
-          //     params[1].data +
-          //     "<br>";
+          // alwaysShowContent: true,
+          borderColor: "blue",
 
-          //   return (
-          //     '<div class="showBox"  style="bcakground:#4b4b4b"  >' +
-          //     res +
-          //     "</div>"
-          //   );
-          // },
         },
         grid: {
           bottom: 60,
@@ -174,7 +159,6 @@ export default {
                 fontFamily: "SourceHanSansCN-Regular",
               },
             },
-
             name: "",
             nameTextStyle: {
               color: "#666666",
@@ -184,13 +168,46 @@ export default {
               show: false,
             },
             axisLine: {
-              show: false,
+              show: true,
             },
             splitLine: {
               lineStyle: {
                 color: "#F4F6F8",
               },
             },
+          },
+          {
+            type: "value",
+            alignTicks: true,
+
+            min: 0,
+            max: 100,
+            name: "",
+            nameTextStyle: {
+              color: "#666666",
+              fontSize: 12,
+            },
+            // minInterval: 1,
+            show: true,
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              show: true,
+            },
+            axisLabel: {
+              rich: {
+                a: {
+                  height: 40,
+                },
+              },
+              textStyle: {
+                fontSize: 11,
+                color: "#8F96A5",
+                fontFamily: "SourceHanSansCN-Regular",
+              },
+            },
+
           },
         ],
 
@@ -285,8 +302,7 @@ export default {
       return colorTemp;
     },
     columnarColorOne() {
-      console.log(this?.options?.externalVariables?.渐变色2?.split(","), '===========');
-      console.log(this?.options?.externalVariables?.渐变色2, '===========');
+
       let colorTemp =
         this?.options?.externalVariables?.渐变色1?.split(",").length == 2
           ? this?.options?.externalVariables?.渐变色1
@@ -294,8 +310,7 @@ export default {
       return colorTemp.split(",");
     },
     columnarColorTwo() {
-      console.log(this?.options?.externalVariables?.渐变色2?.split(","), '===========');
-      console.log(this?.options?.externalVariables?.渐变色2, '===========');
+
       let colorTemp =
         this?.options?.externalVariables?.渐变色2?.split(",").length == 2
           ? this?.options?.externalVariables?.渐变色2
@@ -401,6 +416,14 @@ export default {
       let width = Number(this.options?.externalVariables?.图例图形宽) || 25
       let height = Number(this.options?.externalVariables?.图例图形高) || 14
       return { width, height }
+    },
+    rotate() {
+      let rot = Number(this.options?.externalVariables?.x坐标标题度数) || 0
+      return rot
+    },
+    tUnit() {
+      let dd = this.options?.externalVariables?.次轴单位 || ''
+      return dd
     }
     // colorArr(){
     //   return{c  }this.options.externalVariables.color
@@ -493,16 +516,22 @@ export default {
           )}}`,
         ];
       };
+
       this.options1.tooltip.formatter = function (params) {
+
+        let color1 = params[0].color.colorStops[0].color
+        let color2 = params[1].color.colorStops[0].color
+        let color3 = that.labelColor.color
         let res =
+          `<div  class= 'pin' style=' color:${color3};'>●&nbsp </div>` +
           "总电量: " +
           ((Number(params[0].data) + Number(params[1].data)) /
             that.unitSystem.multiple).toFixed(that.unitSystem.places) +
-          "<br>" +
+          "<br>" + `<div   class= 'pin' style=' color:${color1};'>●&nbsp</div>` +
           "自发自用电量: " +
           (Number(params[0].data) /
             that.unitSystem.multiple).toFixed(that.unitSystem.places) +
-          "<br>" +
+          "<br>" + `<div   class= 'pin'  style=' color:${color2};'>●&nbsp</div>` +
           "上网电量: " +
           (Number(params[1].data) /
             that.unitSystem.multiple).toFixed(that.unitSystem.places) +
@@ -516,15 +545,20 @@ export default {
     } else {
       this.options1.yAxis[0].axisLabel.formatter = function (a) {
         return [`{a|${a}}`];
+
       };
       this.options1.tooltip.formatter = function (params) {
+        let color1 = params[0].color.colorStops[0].color
+        let color2 = params[1].color.colorStops[0].color
+        let color3 = that.labelColor.color
         let res =
+          `<div  class= 'pin' style=' color:${color3};'>●&nbsp </div>` +
           "总电量: " +
           (Number(params[0].data) + Number(params[1].data)) +
-          "<br>" +
+          "<br>" + `<div   class= 'pin' style=' color:${color1};'>●&nbsp</div>` +
           "自发自用电量: " +
           params[0].data +
-          "<br>" +
+          "<br>" + `<div   class= 'pin' style=' color:${color2};'>●&nbsp</div>` +
           "上网电量: " +
           params[1].data +
           "<br>";
@@ -533,6 +567,7 @@ export default {
           '<div class="showBox"  style="bcakground:#4b4b4b"  >' + res + "</div>"
         );
       };
+      this.options1.yAxis[0].name = this.unitSystem.unit;
     }
     if (this.options?.externalVariables?.倍数 === '' || this.options?.externalVariables?.倍数 === undefined) {
       this.options1.yAxis[0].name = '';
@@ -540,24 +575,36 @@ export default {
         return [`{a|${a}}`];
       };
       this.options1.tooltip.formatter = function (params) {
-        let res =
+        let color1 = params[0].color.colorStops[0].color
+        let color2 = params[1].color.colorStops[0].color
+        let color3 = that.labelColor.color
+        let res = `<div  class= 'pin' style=' color:${color3};'>●&nbsp </div>` +
           "总电量: " +
           (Number(params[0].data) + Number(params[1].data)) +
-          "<br>" +
+          "<br>" + `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
           "自发自用电量: " +
           params[0].data +
-          "<br>" +
+          "<br>" + `<div  class= 'pin' style=' color:${color2};'>●&nbsp </div>` +
           "上网电量: " +
           params[1].data +
           "<br>";
 
         return (
-          '<div class="showBox"  style="bcakground:#4b4b4b"  >' + res + "</div>"
+          '<div class="showBox"  style="bcakground:#4b4b4b;"  >' + res + "</div>"
         );
       };
+      this.options1.yAxis[0].name = this.unitSystem.unit;
     }
     this.options1.xAxis.axisLabel.textStyle = this.xAxisStyle;
     this.options1.yAxis[0].axisLabel.rich.a = this.yAxisStyle;
+    this.options1.yAxis[1].name = this.tUnit
+    this.options1.yAxis[1].axisLabel.formatter = function (a) {
+
+      return [
+        `{a|${a.toFixed(0)}}`,
+      ];
+    };
+    this.options1.yAxis[1].axisLabel.rich.a = this.yAxisStyle;
 
     for (let key in this.legendOps) {
       this.options1.legend[key] = this.legendOps[key];
@@ -571,6 +618,7 @@ export default {
     this.options1.legend.textStyle = this.legendColor;
     this.options1.legend.itemWidth = this.legendWidt.width
     this.options1.legend.itemHeight = this.legendWidt.height
+    this.options1.xAxis.axisLabel.rotate = this.rotate
     // this.options1.yAxis[1].name = "";
     // this.options1.yAxis[1].axisLabel.formatter = function (a) {
     //   return [
@@ -579,7 +627,7 @@ export default {
     //     }}`,
     //   ];
     // };
-
+    this.options1.yAxis[1].show = this.Secondaryaxis ? true : false;
     // if (this.Secondaryaxis) {
     //   this.options1.series[1].yAxisIndex = 1;
 
@@ -641,7 +689,7 @@ export default {
       });
     this.updateProcess && this.updateProcess();
 
-    this.mountFn()
+
   },
   mounted() {
     this.$refs.analyzer.parentNode.style.height = "100%";
@@ -747,7 +795,7 @@ export default {
       temp.parentNode.style.display = 'block'
       this.$refs.analyzer.style.display = "block";
       this.show = this.$refs.analyzer.style.display == 'block'
-
+      let tempDom = this.$refs.overDiv
       if (tempDom.style.display == 'block' || tempDom.style.display == '') tempDom.style.display = 'none'
 
     },
@@ -755,7 +803,7 @@ export default {
 
 
       this.$refs.analyzer.style.display = "none";
-      let tempDom = document.querySelector('.overDiv')
+      let tempDom = this.$refs.overDiv
       if (tempDom.style.display == 'block' || tempDom.style.display == '') tempDom.style.display = 'none'
     },
   },
@@ -766,8 +814,14 @@ export default {
 <style lang="less" scoped>
 .echarts {
   height: 100%;
+
   // height: 900px;
   // width: 600px;
+  .showBox {
+    background-color: #4b4b4b;
+
+
+  }
 }
 
 .overDiv {
@@ -777,9 +831,5 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-}
-
-.showBox {
-  background-color: #4b4b4b;
 }
 </style>
