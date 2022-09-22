@@ -10,3 +10,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.showBox .pin {
+  display: inline-block;
+  font-size: 18px;
+}
