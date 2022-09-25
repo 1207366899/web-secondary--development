@@ -15,3 +15,20 @@ body {
   display: inline-block;
   font-size: 18px;
 }
+
+.showBox .flex {
+  display: flex;
+  justify-content: space-between;
+  /* justify-content: s; */
+}
+
+.showBox .flex .end {
+  font-weight: 700;
+  margin-left: 20px;
+  align-self: flex-end;
+
+}
+
+.showBox .dd {
+  font-weight: 700;
+}
