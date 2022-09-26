@@ -416,22 +416,26 @@ export default {
     let addArr = [];
     let dArr = [];
     let tempS = []
+    let data3 = []
     let dataArr1 = tableD.map((x, i) => {
       dataArr2.push(Number(x[2]));
       addArr.push(x[0]);
+      data3.push(Number(x[3]))
       let xa = x[0]
-      tempS[i] = { axis: xa, data1: Number(x[1]), data2: Number(x[2]), sum: (Number(x[1]) + Number(x[2])) }
+      tempS[i] = { axis: xa, data1: Number(x[1]), data2: Number(x[2]), sum: (Number(x[1]) + Number(x[2])), data3: Number(x[3]) }
       dArr.push(Number(x[1]) + Number(x[2]));
       return Number(x[1]);
     });
     tempS.sort((a, b) => {
       return b.sum - a.sum
     })
-
+    let paxData = []
+    let xiaoNa = []
     if (!this.descending) {
       this.options1.series[0].data = dataArr1;
       this.options1.series[1].data = dataArr2;
       this.options1.xAxis.data = addArr;
+      xiaoNa = [...data3]
     } else {
       let a1 = []
       let a2 = []
@@ -442,17 +446,17 @@ export default {
         a1.push(x.data1)
         a2.push(x.data2)
         a3.push(x.sum)
+        paxData.push(x.data3)
         a4.push(x.axis)
       })
       this.options1.series[0].data = a1
       this.options1.series[1].data = a2
-
+      xiaoNa = [...paxData]
       this.options1.xAxis.data = a4
     }
 
     // console.log(tempS, '====')
     // this.options1.series[0].data = dataArr1;
-    // this.options1.series[1].data = dataArr2;
     let y = this.pjzFn(dArr) - 1;
     let maxY = Number(String(Math.round(Math.max(...dArr) / 4))[0]);
     let rangeY = this.setYAxisMaxVal(dArr, y, maxY);
@@ -464,12 +468,16 @@ export default {
     this.options1.series[1].itemStyle.normal.label.formatter = (val) => {
       // let data1 = that.temp1[val.dataIndex];
       //如果用资产就用这个
-      let data1 = dataArr1[val.dataIndex];
-      let temp = Number(data1) + Number(val.data);
+
+      let data1 = xiaoNa[val.dataIndex];
+
+
       if (this.options.externalVariables.是否开启百分号 == "true") {
-        return ((data1 / temp) * 100).toFixed(2) + "%";
+        // return ((data1 / temp) * 100).toFixed(2) + "%";
+        return data1.toFixed(2) + "%";
       } else {
-        return ((data1 / temp) * 100).toFixed(2);
+        // return ((data1 / temp) * 100).toFixed(2);
+        return data1.toFixed(2);
       }
     };
 
@@ -531,7 +539,7 @@ export default {
       }
     }
 
-    if (that.unitSystem.multiple < rangeY) {
+    if (that.unitSystem.multiple <= rangeY) {
       this.options1.yAxis[0].axisLabel.formatter = function (a) {
         return [`{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}}`];
       };
@@ -542,9 +550,9 @@ export default {
         let color2 = params[1].color.colorStops[0].color;
         let color3 = that.labelColor.color;
         let bf = that.options.externalVariables.是否开启百分号 == "true" ? '%' : ''
-        let data1 = (Number(params[0].data) / that.unitSystem.multiple).toFixed(that.unitSystem.places)
-        let sum1 = ((Number(params[0].data) + Number(params[1].data)) / that.unitSystem.multiple).toFixed(that.unitSystem.places)
-        let sum = (data1 / sum1 * 100).toFixed(2) + bf
+        let data3 = xiaoNa[params[0].dataIndex]
+        let sum = data3.toFixed(2) + bf
+
         let res = `<span class='dd'  >` + params[0].name + `</span>` + '<br/>' +
 
 
@@ -582,7 +590,8 @@ export default {
         let color2 = params[1].color.colorStops[0].color;
         let color3 = that.labelColor.color;
         let bf = that.options.externalVariables.是否开启百分号 == "true" ? '%' : ''
-        let sum = ((params[0].data / (Number(params[0].data) + Number(params[1].data))) * 100).toFixed(2) + bf
+        let data3 = xiaoNa[params[0].dataIndex]
+        let sum = data3.toFixed(2) + bf
         let res = `<span class='dd'  >` + params[0].name + `</span>` + '<br/>' +
 
           `<div  class='flex' >` + `<div>` +
@@ -617,7 +626,8 @@ export default {
         let color3 = that.labelColor.color;
         // ((data1 / temp) * 100).toFixed(2) + "%";
         let bf = that.options.externalVariables.是否开启百分号 == "true" ? '%' : ''
-        let sum = ((params[0].data / (Number(params[0].data) + Number(params[1].data))) * 100).toFixed(2) + bf
+        let data3 = xiaoNa[params[0].dataIndex]
+        let sum = data3.toFixed(2) + bf
 
         let res = `<span class='dd'  >` + params[0].name + `</span>` + '<br/>' +
 
