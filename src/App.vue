@@ -516,7 +516,7 @@ export default {
     if (this.company) {
       if (this.company.indexOf(':') != -1) {
         company = this.company.split(':')[1].trim()
-      } else if (this.company.indexOf("：").indexOf != -1) {
+      } else if (this.company.indexOf("：") != -1) {
 
         company = this.company.split('：')[1].trim()
       } else if (this.company.indexOf('单位') != -1) {
@@ -529,7 +529,7 @@ export default {
     if (this.unitSystem.unit) {
       if (this.unitSystem.unit.indexOf(':') != -1) {
         company1 = this.unitSystem.unit.split(':')[1].trim()
-      } else if (this.unitSystem.unit.indexOf("：").indexOf != -1) {
+      } else if (this.unitSystem.unit.indexOf("：") != -1) {
 
         company1 = this.unitSystem.unit.split('：')[1].trim()
       } else if (this.unitSystem.unit.indexOf('单位') != -1) {
