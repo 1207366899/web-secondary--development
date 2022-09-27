@@ -101,7 +101,7 @@ export default {
             color: "#000", //字体颜色，
             fontSize: 13, //字体大小
           },
-          // alwaysShowContent: true,
+          alwaysShowContent: true,
           borderColor: "transparent",
         },
         grid: {
@@ -389,6 +389,12 @@ export default {
     descending() {
       let dd = this.options?.externalVariables?.降序 == 'true' ? true : false;
       return dd
+    },
+    tooltipOptions() {
+
+      let fontIcon = this.options?.externalVariables?.提示框图例大小
+      let fontSzie = this.options?.externalVariables?.提示框文字大小
+      return { fontIcon, fontSzie }
     }
     // colorArr(){
     //   return{c  }this.options.externalVariables.color
@@ -538,7 +544,18 @@ export default {
         company1 = this.unitSystem.unit
       }
     }
+    let fontS = this.tooltipOptions
+    let heightF
+    if (fontS.fontSzie && fontS.fontIcon) {
 
+      let a1 = Number(fontS.fontIcon.replace('px', ''))
+      let a2 = Number(fontS.fontSzie.replace('px', ''))
+      heightF = a1 > a2 ? a1 + 'px' : a2 + 'px'
+    } else {
+
+      heightF = fontS.fontSzie || fontS.fontIcon
+
+    }
     if (that.unitSystem.multiple <= rangeY) {
       this.options1.yAxis[0].axisLabel.formatter = function (a) {
         return [`{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}}`];
@@ -553,23 +570,26 @@ export default {
         let data3 = xiaoNa[params[0].dataIndex]
         let sum = data3.toFixed(2) + bf
 
-        let res = `<span class='dd'  >` + params[0].name + `</span>` + '<br/>' +
+        let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
 
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
-          params[0]?.seriesName + `</div>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div >` +
+          `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
+          params[0]?.seriesName + '</span>' + `</div>` +
           `<div  class='end' >` + (Number(params[0].data) / that.unitSystem.multiple).toFixed(that.unitSystem.places) + company + `</div>` + `</div>` +
 
 
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color2};'>●&nbsp </div>` +
-          params[1]?.seriesName + `</div>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
+          '</span>' +
+          `</div>` +
           `<div  class='end' >` + (Number(params[1].data) / that.unitSystem.multiple).toFixed(that.unitSystem.places) + company + `</div>` + `</div>`
-          + `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color3};'>●&nbsp </div>` +
-          that.options1.legend.data[2].name + `</div>` +
+          +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div class='text1'>` +
+          `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
+          '</span>' +
+          `</div>` +
           `<div  class='end' >` + sum + `</div>` + `</div>`
 
           ;
@@ -592,24 +612,32 @@ export default {
         let bf = that.options.externalVariables.是否开启百分号 == "true" ? '%' : ''
         let data3 = xiaoNa[params[0].dataIndex]
         let sum = data3.toFixed(2) + bf
-        let res = `<span class='dd'  >` + params[0].name + `</span>` + '<br/>' +
+        let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
-          params[0]?.seriesName + `</div>` +
+
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
+          params[0]?.seriesName + '</span>' + `</div>` +
           `<div  class='end' >` + params[0].data + company1 + `</div>` + `</div>` +
 
+          // `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
+          // "自发自用电量: " +
+          // params[0].data +
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color2};'>●&nbsp </div>` +
-          params[1]?.seriesName + `</div>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
+          '</span>' +
+          `</div>` +
           `<div  class='end' >` + params[1].data + company1 + `</div>` + `</div>` +
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color3};'>●&nbsp </div>` +
-          that.options1.legend.data[2].name + `</div>` +
-          `<div  class='end' >` + sum + `</div>` + `</div>`
 
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div class='text1'>` +
+          `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
+          '</span>' +
+          `</div>` +
+          `<div  class='end' >` + sum + `</div>` + `</div>`
           ;
+
+        ;
         return '<div class="showBox"  style="bcakground:#4b4b4b"  >' + res + "</div>";
       };
       this.options1.yAxis[0].name = this.unitSystem.unit;
@@ -629,26 +657,28 @@ export default {
         let data3 = xiaoNa[params[0].dataIndex]
         let sum = data3.toFixed(2) + bf
 
-        let res = `<span class='dd'  >` + params[0].name + `</span>` + '<br/>' +
+        let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
 
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
-          params[0]?.seriesName + `</div>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
+          params[0]?.seriesName + '</span>' + `</div>` +
           `<div  class='end' >` + params[0].data + company1 + `</div>` + `</div>` +
 
           // `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
           // "自发自用电量: " +
           // params[0].data +
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color2};'>●&nbsp </div>` +
-          params[1]?.seriesName + `</div>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
+          '</span>' +
+          `</div>` +
           `<div  class='end' >` + params[1].data + company1 + `</div>` + `</div>` +
 
-          `<div  class='flex' >` + `<div>` +
-          `<div  class= 'pin' style=' color:${color3};'>●&nbsp </div>` +
-          that.options1.legend.data[2].name + `</div>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div class='text1'>` +
+          `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
+          '</span>' +
+          `</div>` +
           `<div  class='end' >` + sum + `</div>` + `</div>`
           ;
 

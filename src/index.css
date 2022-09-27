@@ -22,10 +22,17 @@ body {
   /* justify-content: s; */
 }
 
+.showBox .flex .text1 {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  /* justify-content: s; */
+}
+
 .showBox .flex .end {
   font-weight: 700;
   margin-left: 20px;
-  align-self: flex-end;
+  align-self: center;
 
 }
 
