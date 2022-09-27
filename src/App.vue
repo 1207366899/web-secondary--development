@@ -4,7 +4,7 @@
     height: '100%',
     position: 'relative',
   }" ref="analyzer">
-    <div class="echarts" ref="echart"></div>
+    <div class="echarts" ref="echart1"></div>
     <div class="overDiv" ref="overDiv" v-show="showZ" :style="{ backgroundColor: color }"></div>
   </div>
 </template>
