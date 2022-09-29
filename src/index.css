@@ -10,3 +10,32 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.echarts .showBox .pin {
+  display: inline-block;
+  font-size: 18px;
+}
+
+.echarts .showBox .flex {
+  display: flex;
+  justify-content: space-between;
+  /* justify-content: s; */
+}
+
+.echarts .showBox .flex .text1 {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  /* justify-content: s; */
+}
+
+.echarts .showBox .flex .end {
+  font-weight: 700;
+  margin-left: 20px;
+  align-self: center;
+
+}
+
+.echarts .showBox .dd {
+  font-weight: 700;
+}
