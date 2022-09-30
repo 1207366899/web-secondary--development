@@ -743,7 +743,6 @@ export default {
           return `${name}`;
         }
       };
-
     }
     this.options1.legend.itemWidth = this.legendWidt.width;
     this.options1.legend.itemHeight = this.legendWidt.height;
