@@ -561,7 +561,6 @@ export default {
       heightF = fontS.fontSzie || fontS.fontIcon
 
     }
-
     if (that.unitSystem.multiple <= rangeY) {
       this.options1.yAxis[0].axisLabel.formatter = function (a) {
         return [`{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}}`];
