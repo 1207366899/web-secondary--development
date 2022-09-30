@@ -1,7 +1,7 @@
 {
-  "id": "7ed162e9-daaa-4c18-9ad4-f5bbd6f5509f",
+  "id": "4c53b2cb-152c-4826-8770-984d43cda175",
   "type": "analyzers",
-  "main": "app.95c938d8.js",
+  "main": "app.0bef7f98.js",
   "version": "2",
   "props": {
     "img": "custom_table.png",
@@ -48,7 +48,9 @@
       "降序",
       "提示框图例大小",
       "提示框文字大小",
-      "id"
+      "提示框行间距",
+      "id",
+      "初始隐藏"
     ]
   }
 }

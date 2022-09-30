@@ -30,7 +30,7 @@ const debounce = (func, ms) => {
 };
 
 import { tsUnionType } from "@babel/types";
-import * as echarts from "echarts";
+import * as echarts1 from "echarts";
 import { TimePicker } from "element-ui";
 export default {
   props: {
@@ -102,6 +102,7 @@ export default {
             color: "#000", //字体颜色，
             fontSize: 13, //字体大小
           },
+          confine: true,
           // alwaysShowContent: true,
           borderColor: "transparent",
         },
@@ -225,7 +226,7 @@ export default {
             itemStyle: {
               normal: {
                 // opacity: 0.8,
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                color: new echarts1.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
                     color: "rgb(56, 108, 166)",
@@ -259,7 +260,7 @@ export default {
                   },
                 },
                 opacity: 0.8,
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                color: new echarts1.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
                     color: "rgb(65, 170, 139)",
@@ -395,7 +396,8 @@ export default {
 
       let fontIcon = this.options?.externalVariables?.提示框图例大小
       let fontSzie = this.options?.externalVariables?.提示框文字大小
-      return { fontIcon, fontSzie }
+      let lineSzie = this.options?.externalVariables?.提示框行间距
+      return { fontIcon, fontSzie, lineSzie }
     }
     // colorArr(){
     //   return{c  }this.options.externalVariables.color
@@ -488,8 +490,7 @@ export default {
       }
     };
 
-    console.log(this.columnarColorTwo, this.columnarColorOne, '====分析仪');
-    this.options1.series[0].itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+    this.options1.series[0].itemStyle.normal.color = new echarts1.graphic.LinearGradient(0, 0, 0, 1, [
       {
         offset: 0,
         color: this.columnarColorOne[0],
@@ -499,7 +500,7 @@ export default {
         color: this.columnarColorOne[1] || this.columnarColorOne[0],
       },
     ]);
-    this.options1.series[1].itemStyle.normal.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+    this.options1.series[1].itemStyle.normal.color = new echarts1.graphic.LinearGradient(0, 0, 0, 1, [
       {
         offset: 0,
         color: this.columnarColorTwo[0],
@@ -510,7 +511,9 @@ export default {
       },
     ]);
     columnData?.forEach((x, i) => {
-      this.options1.legend.data[i] = { name: x };
+      this.options1.legend.data[i] = { name: x, icon: 'rect' };
+      //   this.options1.legend.data[0].icon = "rect";
+      // this.options1.legend.data[1].icon = "rect";
     });
     // this.options1.legend.data = columnData;
     this.options1.series.forEach((item, i) => {
@@ -558,6 +561,7 @@ export default {
       heightF = fontS.fontSzie || fontS.fontIcon
 
     }
+
     if (that.unitSystem.multiple <= rangeY) {
       this.options1.yAxis[0].axisLabel.formatter = function (a) {
         return [`{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}}`];
@@ -575,14 +579,14 @@ export default {
         let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
 
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div >` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie};margin-top:${fontS.lineSzie}' >` + `<div  class='text1' >` +
           `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
           params[0]?.seriesName + '</span>' + `</div>` +
           `<div  class='end' >` + (Number(params[0].data) / that.unitSystem.multiple).toFixed(that.unitSystem.places) + company + `</div>` + `</div>` +
 
 
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie}' >` + `<div  class='text1'>` +
           `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
           '</span>' +
           `</div>` +
@@ -617,7 +621,7 @@ export default {
         let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
 
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie};margin-top:${fontS.lineSzie}' >` + `<div  class='text1'>` +
           `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
           params[0]?.seriesName + '</span>' + `</div>` +
           `<div  class='end' >` + params[0].data + company1 + `</div>` + `</div>` +
@@ -626,7 +630,7 @@ export default {
           // "自发自用电量: " +
           // params[0].data +
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie}' >` + `<div  class='text1'>` +
           `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
           '</span>' +
           `</div>` +
@@ -662,7 +666,7 @@ export default {
         let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
 
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie};margin-top:${fontS.lineSzie}' >` + `<div  class='text1'>` +
           `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
           params[0]?.seriesName + '</span>' + `</div>` +
           `<div  class='end' >` + params[0].data + company1 + `</div>` + `</div>` +
@@ -671,13 +675,13 @@ export default {
           // "自发自用电量: " +
           // params[0].data +
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div  class='text1'>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie}' >` + `<div  class='text1'>` +
           `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
           '</span>' +
           `</div>` +
           `<div  class='end' >` + params[1].data + company1 + `</div>` + `</div>` +
 
-          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div class='text1'>` +
+          `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};' >` + `<div class='text1'>` +
           `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
           '</span>' +
           `</div>` +
@@ -705,8 +709,7 @@ export default {
     this.options1.yAxis[0].splitLine.lineStyle.color = this.xAxisColor.ycolor;
 
     this.options1.legend.itemGap = Number(this.options?.externalVariables?.图例之间的间距) ? Number(this?.options.externalVariables?.图例之间的间距) : 0;
-    this.options1.legend.data[0].icon = "rect";
-    this.options1.legend.data[1].icon = "rect";
+
     if (this.options?.externalVariables?.是否开启百分号 == "true") {
       this.options1.legend.data[2].icon = "none";
       this.options1.legend.textStyle = {
@@ -727,9 +730,9 @@ export default {
           return name;
         }
       };
-      console.log(this.options1);
+
     } else {
-      this.options1.legend.data[2].icon = "rect";
+      this.options1.legend.data.length != 0 ? this.options1.legend.data[2].icon = "rect" : null;
       this.options1.legend.textStyle = this.legendColor;
       this.options1.legend.formatter = (name) => {
         if (name == "上网电量") {
@@ -766,6 +769,7 @@ export default {
   },
 
   mounted() {
+
     const events = [
       {
         key: "onClick",
@@ -806,7 +810,10 @@ export default {
     this.$refs.analyzer.parentNode.style.height = "100%";
     this.$refs.analyzer.parentNode.style.width = "100%";
     this.$refs.analyzer.parentNode.parentNode.style.minHeight = "0";
-    this.$refs.analyzer.style.display = "block";
+    let tempVisible = this?.options?.externalVariables?.初始隐藏 == 'true' ? '0' : '1'
+    this.$refs.analyzer.style.opacity = tempVisible;
+
+    // this.$refs.analyzer.style.display = "block";
 
 
     this.componentId &&
@@ -830,7 +837,7 @@ export default {
   methods: {
     initFn() {
       // this.Gechart = echarts.init(this.$refs.echart, null, { devicePixelRatio: 0 });
-      this.Gechart1 = echarts.init(this.$refs.echart1, null, { devicePixelRatio: 2 });
+      this.Gechart1 = echarts1.init(this.$refs.echart1, null, { devicePixelRatio: 1, renderer: 'svg' });
 
       this.Gechart1.setOption(this.options1);
 
@@ -915,13 +922,22 @@ export default {
     do_EventCenter_show(param) {
       let temp = this.dddgFn(this.$refs.analyzer);
       temp.parentNode.style.display = "block";
+      temp.children[0].style.zIndex = 110;
+      this.$refs.analyzer.style.zIndex = 110;
       this.$refs.analyzer.style.display = "block";
+      this.$refs.analyzer.style.opacity = 1;
+
       this.show = this.$refs.analyzer.style.display == "block";
       let tempDom = this.$refs.overDiv;
+      this.options1 && this.Gechart1.setOption(this.options1);
       if (tempDom.style.display == "block" || tempDom.style.display == "") tempDom.style.display = "none";
     },
     do_EventCenter_hide(param) {
+      let temp = this.dddgFn(this.$refs.analyzer);
+      temp.children[0].style.zIndex = 0;
       this.$refs.analyzer.style.display = "none";
+      this.$refs.analyzer.style.opacity = 0;
+      this.$refs.analyzer.style.zIndex = 0;
       let tempDom = this.$refs.overDiv;
       if (tempDom.style.display == "block" || tempDom.style.display == "") tempDom.style.display = "none";
     },
@@ -932,7 +948,7 @@ export default {
 <style lang="less" scoped>
 .echarts {
   height: 100%;
-
+  -webkit-text-size-adjust: none;
   // height: 900px;
   // width: 600px;
 
