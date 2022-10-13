@@ -10,6 +10,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import "./index.css";
 import { Table, TableColumn } from "element-ui";
+import Temp from './temp.vue';
 import * as echarts from "echarts";
 Vue.prototype.$echarts = echarts;
 Vue.config.productionTip = false;
@@ -94,15 +95,36 @@ if (dom) {
       window.CUSTOM_PLUGIN = new Map();
     }
 
-    window.CUSTOM_PLUGIN.set(process.env.VUE_APP_CUSTOM_PLUGIN_ID, (dom, props) => {
+    window.CUSTOM_PLUGIN.set(process.env.VUE_APP_CUSTOM_PLUGIN_ID, (dom, props, context, eventBus) => {
       if (dom.childNodes.length > 0) {
         dom.removeChild(dom.childNodes[0]);
       }
       const div = document.createElement("div");
 
       dom.appendChild(div);
+      window.xyProps = props
+      let tValue = JSON.parse(JSON.stringify(props))
+
+
+      // eventBus.on((val) => {
+      //   if (dom.childNodes.length > 0) {
+      //     dom.removeChild(dom.childNodes[0]);
+      //   }
+      //   const div = document.createElement("div");
+
+      //   dom.appendChild(div);
+      //   new Vue({
+      //     render: (h) => <App {...{ val }} />,
+      //   }).$mount(div);
+      // })
+
+      // // console.log(props, '====8080');
+      // new Vue({
+      //   render: (h) => <App {...{ props }} />,
+      // }).$mount(div);
       new Vue({
-        render: (h) => <App {...{ props }} />,
+        // render: (h) => <Appt tValue={tValue} eventBus={eventBus} />,
+        render: (h) => <Temp tValue={tValue} eventBus={eventBus} />,
       }).$mount(div);
     });
   }

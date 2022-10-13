@@ -412,10 +412,18 @@ export default {
       immediate: true,
       deep: true,
     },
+    dataSource: {
+      handler(newV) {
+        this.dataHandFn()
+        this.Gechart1.setOption(this.options1);
+      },
+      deep: true,
+    }
   },
   created() {
     this.showZ = this.options?.externalVariables?.遮罩体显示 == "true" ? true : false;
     this.color = this.options?.externalVariables?.遮罩体颜色 || "#0e2a43";
+    if (this.dataSource?.length == 0 || !this.dataSource) return
     let tableD = JSON.parse(JSON.stringify(this.dataSource));
     let columnData = tableD.shift();
     columnData?.shift();
@@ -465,7 +473,6 @@ export default {
     }
 
     // console.log(tempS, '====')
-    // this.options1.series[0].data = dataArr1;
     let y = this.pjzFn(dArr) - 1;
     let maxY = Number(String(Math.round(Math.max(...dArr) / 4))[0]);
     let rangeY = this.setYAxisMaxVal(dArr, y, maxY);
@@ -844,6 +851,359 @@ export default {
         this.Gechart1.resize();
       };
       window.addEventListener("resize", debounce(task, 300));
+    },
+    dataHandFn() {
+      this.showZ = this.options?.externalVariables?.遮罩体显示 == "true" ? true : false;
+      this.color = this.options?.externalVariables?.遮罩体颜色 || "#0e2a43";
+      if (this.dataSource?.length == 0 || !this.dataSource) return
+      let tableD = JSON.parse(JSON.stringify(this.dataSource));
+      let columnData = tableD.shift();
+      columnData?.shift();
+
+      //处理资产里的数据
+      let dataArr2 = [];
+      let addArr = [];
+      let dArr = [];
+      let tempS = []
+      let data3 = []
+      let dataArr1 = tableD.map((x, i) => {
+        dataArr2.push(Number(x[2]));
+        addArr.push(x[0]);
+        data3.push(Number(x[3]))
+        let xa = x[0]
+        tempS[i] = { axis: xa, data1: Number(x[1]), data2: Number(x[2]), sum: (Number(x[1]) + Number(x[2])), data3: Number(x[3]) }
+        dArr.push(Number(x[1]) + Number(x[2]));
+        return Number(x[1]);
+      });
+      tempS.sort((a, b) => {
+        return b.sum - a.sum
+      })
+      let paxData = []
+      let xiaoNa = []
+      if (!this.descending) {
+        this.options1.series[0].data = dataArr1;
+        this.options1.series[1].data = dataArr2;
+        this.options1.xAxis.data = addArr;
+        xiaoNa = [...data3]
+      } else {
+        let a1 = []
+        let a2 = []
+        let a3 = []
+        let a4 = []
+
+        tempS.forEach((x) => {
+          a1.push(x.data1)
+          a2.push(x.data2)
+          a3.push(x.sum)
+          paxData.push(x.data3)
+          a4.push(x.axis)
+        })
+        this.options1.series[0].data = a1
+        this.options1.series[1].data = a2
+        xiaoNa = [...paxData]
+        this.options1.xAxis.data = a4
+      }
+
+      // console.log(tempS, '====')
+      let y = this.pjzFn(dArr) - 1;
+      let maxY = Number(String(Math.round(Math.max(...dArr) / 4))[0]);
+      let rangeY = this.setYAxisMaxVal(dArr, y, maxY);
+
+      // this.options1.series[2].data = dArr
+      // this.options1.xAxis.data = addArr;
+
+      // let that = this;
+      this.options1.series[1].itemStyle.normal.label.formatter = (val) => {
+        // let data1 = that.temp1[val.dataIndex];
+        //如果用资产就用这个
+
+        let data1 = xiaoNa[val.dataIndex];
+
+
+        if (this.options?.externalVariables?.是否开启百分号 == "true") {
+          // return ((data1 / temp) * 100).toFixed(2) + "%";
+          return data1.toFixed(2) + "%";
+        } else {
+          // return ((data1 / temp) * 100).toFixed(2);
+          return data1.toFixed(2);
+        }
+      };
+
+      this.options1.series[0].itemStyle.normal.color = new echarts1.graphic.LinearGradient(0, 0, 0, 1, [
+        {
+          offset: 0,
+          color: this.columnarColorOne[0],
+        },
+        {
+          offset: 1,
+          color: this.columnarColorOne[1] || this.columnarColorOne[0],
+        },
+      ]);
+      this.options1.series[1].itemStyle.normal.color = new echarts1.graphic.LinearGradient(0, 0, 0, 1, [
+        {
+          offset: 0,
+          color: this.columnarColorTwo[0],
+        },
+        {
+          offset: 1,
+          color: this.columnarColorTwo[1],
+        },
+      ]);
+      columnData?.forEach((x, i) => {
+        this.options1.legend.data[i] = { name: x, icon: 'rect' };
+        //   this.options1.legend.data[0].icon = "rect";
+        // this.options1.legend.data[1].icon = "rect";
+      });
+      // this.options1.legend.data = columnData;
+      this.options1.series.forEach((item, i) => {
+        item.name = columnData?.[i];
+      });
+      this.options1.yAxis[0].max = rangeY;
+      this.options1.yAxis[0].min = 0;
+      let that = this;
+      let company1 = ''
+      let company = ''
+      if (this.company) {
+        if (this.company.indexOf(':') != -1) {
+          company = this.company.split(':')[1].trim()
+        } else if (this.company.indexOf("：") != -1) {
+
+          company = this.company.split('：')[1].trim()
+        } else if (this.company.indexOf('单位') != -1) {
+          company = this.company.split('单位')[1].trim()
+        } else {
+          company = this.company
+        }
+      }
+
+      if (this.unitSystem.unit) {
+        if (this.unitSystem.unit.indexOf(':') != -1) {
+          company1 = this.unitSystem.unit.split(':')[1].trim()
+        } else if (this.unitSystem.unit.indexOf("：") != -1) {
+
+          company1 = this.unitSystem.unit.split('：')[1].trim()
+        } else if (this.unitSystem.unit.indexOf('单位') != -1) {
+          company1 = this.unitSystem.unit.split('单位')[1].trim()
+        } else {
+          company1 = this.unitSystem.unit
+        }
+      }
+      let fontS = this.tooltipOptions1
+      let heightF
+      if (fontS.fontSzie && fontS.fontIcon) {
+
+        let a1 = Number(fontS.fontIcon.replace('px', ''))
+        let a2 = Number(fontS.fontSzie.replace('px', ''))
+        heightF = a1 > a2 ? a1 + 'px' : a2 + 'px'
+      } else {
+
+        heightF = fontS.fontSzie || fontS.fontIcon
+
+      }
+      if (that.unitSystem.multiple <= rangeY) {
+        this.options1.yAxis[0].axisLabel.formatter = function (a) {
+          return [`{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}}`];
+        };
+
+        this.options1.tooltip.formatter = function (params) {
+
+          let color1 = params[0].color.colorStops[0].color;
+          let color2 = params[1].color.colorStops[0].color;
+          let color3 = that.labelColor.color;
+          let bf = that.options?.externalVariables?.是否开启百分号 == "true" ? '%' : ''
+          let data3 = xiaoNa[params[0].dataIndex]
+          let sum = data3.toFixed(2) + bf
+
+          let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
+
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie};margin-top:${fontS.lineSzie}' >` + `<div  class='text1' >` +
+            `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
+            params[0]?.seriesName + '</span>' + `</div>` +
+            `<div  class='end' >` + (Number(params[0].data) / that.unitSystem.multiple).toFixed(that.unitSystem.places) + company + `</div>` + `</div>` +
+
+
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie}' >` + `<div  class='text1'>` +
+            `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
+            '</span>' +
+            `</div>` +
+            `<div  class='end' >` + (Number(params[1].data) / that.unitSystem.multiple).toFixed(that.unitSystem.places) + company + `</div>` + `</div>`
+            +
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div class='text1'>` +
+            `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
+            '</span>' +
+            `</div>` +
+            `<div  class='end' >` + sum + `</div>` + `</div>`
+
+            ;
+
+
+
+
+          return '<div class="showBox"  style="bcakground:#4b4b4b"  >' + res + "</div>";
+        };
+        this.options1.yAxis[0].name = this.company;
+      } else {
+        this.options1.yAxis[0].axisLabel.formatter = function (a) {
+          return [`{a|${a}}`];
+        };
+        this.options1.tooltip.formatter = function (params) {
+
+          let color1 = params[0].color.colorStops[0].color;
+          let color2 = params[1].color.colorStops[0].color;
+          let color3 = that.labelColor.color;
+          let bf = that.options?.externalVariables?.是否开启百分号 == "true" ? '%' : ''
+          let data3 = xiaoNa[params[0].dataIndex]
+          let sum = data3.toFixed(2) + bf
+          let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
+
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie};margin-top:${fontS.lineSzie}' >` + `<div  class='text1'>` +
+            `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
+            params[0]?.seriesName + '</span>' + `</div>` +
+            `<div  class='end' >` + params[0].data + company1 + `</div>` + `</div>` +
+
+            // `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
+            // "自发自用电量: " +
+            // params[0].data +
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie}' >` + `<div  class='text1'>` +
+            `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
+            '</span>' +
+            `</div>` +
+            `<div  class='end' >` + params[1].data + company1 + `</div>` + `</div>` +
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF}' >` + `<div class='text1'>` +
+            `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
+            '</span>' +
+            `</div>` +
+            `<div  class='end' >` + sum + `</div>` + `</div>`
+            ;
+
+          ;
+          return '<div class="showBox"  style="bcakground:#4b4b4b"  >' + res + "</div>";
+        };
+        this.options1.yAxis[0].name = this.unitSystem.unit;
+      }
+      if (this.options?.externalVariables?.倍数 === "" || this.options?.externalVariables?.倍数 === undefined) {
+        this.options1.yAxis[0].name = "";
+        this.options1.yAxis[0].axisLabel.formatter = function (a) {
+          return [`{a|${a}}`];
+        };
+        this.options1.tooltip.formatter = function (params) {
+
+          let color1 = params[0].color.colorStops[0].color;
+          let color2 = params[1].color.colorStops[0].color;
+          let color3 = that.labelColor.color;
+          // ((data1 / temp) * 100).toFixed(2) + "%";
+          let bf = that.options?.externalVariables?.是否开启百分号 == "true" ? '%' : ''
+          let data3 = xiaoNa[params[0].dataIndex]
+          let sum = data3.toFixed(2) + bf
+
+          let res = `<span class='dd' style='font-size:${fontS.fontSzie}'  >` + params[0].name + `</span>` + '<br/>' +
+
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie};margin-top:${fontS.lineSzie}' >` + `<div  class='text1'>` +
+            `<div  class= 'pin' style=' color:${color1};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}" >` +
+            params[0]?.seriesName + '</span>' + `</div>` +
+            `<div  class='end' >` + params[0].data + company1 + `</div>` + `</div>` +
+
+            // `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
+            // "自发自用电量: " +
+            // params[0].data +
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};margin-bottom:${fontS.lineSzie}' >` + `<div  class='text1'>` +
+            `<div  class= 'pin' style=' color:${color2};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + params[1]?.seriesName +
+            '</span>' +
+            `</div>` +
+            `<div  class='end' >` + params[1].data + company1 + `</div>` + `</div>` +
+
+            `<div  class='flex' style='font-size:${fontS.fontSzie};height:${heightF};' >` + `<div class='text1'>` +
+            `<div  class= 'pin' style=' color:${color3};font-size:${fontS.fontIcon};line-height:${heightF}'>●&nbsp </div>` + `<span style="line-height:${heightF}">` + that.options1.legend.data[2].name +
+            '</span>' +
+            `</div>` +
+            `<div  class='end' >` + sum + `</div>` + `</div>`
+            ;
+
+          return '<div class="showBox"  style="bcakground:#4b4b4b;"  >' + res + "</div>";
+        };
+        this.options1.yAxis[0].name = this.unitSystem.unit;
+      }
+      this.options1.xAxis.axisLabel.textStyle = this.xAxisStyle;
+      this.options1.yAxis[0].axisLabel.rich.a = this.yAxisStyle;
+      this.options1.yAxis[1].name = this.tUnit;
+      this.options1.yAxis[1].axisLabel.formatter = function (a) {
+        return [`{a|${a.toFixed(0)}}`];
+      };
+      this.options1.yAxis[1].axisLabel.rich.a = this.yAxisStyle;
+
+      for (let key in this.legendOps) {
+        this.options1.legend[key] = this.legendOps[key];
+      }
+      this.options1.series[1].itemStyle.normal.label.textStyle = this.labelColor;
+      this.options1.series[2].itemStyle.normal.color = this.labelColor.color;
+      this.options1.xAxis.axisLine.lineStyle.color = this.xAxisColor.xcolor;
+      this.options1.yAxis[0].splitLine.lineStyle.color = this.xAxisColor.ycolor;
+
+      this.options1.legend.itemGap = Number(this.options?.externalVariables?.图例之间的间距) ? Number(this?.options.externalVariables?.图例之间的间距) : 0;
+
+      if (this.options?.externalVariables?.是否开启百分号 == "true") {
+        this.options1.legend.data[2].icon = "none";
+        this.options1.legend.textStyle = {
+          //rich放在textStyle里面
+          rich: {
+            oneone: {
+              // 设置文字、数学、英语这一列的样式
+              color: "red",
+              fontSize: 12,
+              padding: [0, 5, 0, -25],
+            },
+          },
+        };
+        this.options1.legend.formatter = (name) => {
+          if (name == "消纳率") {
+            return `{oneone|xx%}${name}`;
+          } else {
+            return name;
+          }
+        };
+
+      } else {
+        this.options1.legend.data.length != 0 ? this.options1.legend.data[2].icon = "rect" : null;
+        this.options1.legend.textStyle = this.legendColor;
+        this.options1.legend.formatter = (name) => {
+          if (name == "上网电量") {
+            return "上网" + "\n" + "电量";
+          } else if (name == "自发自用电量") {
+            return "自发自" + "\n" + "用电量";
+          } else {
+            return `${name}`;
+          }
+        };
+      }
+      this.options1.legend.itemWidth = this.legendWidt.width;
+      this.options1.legend.itemHeight = this.legendWidt.height;
+      this.options1.xAxis.axisLabel.rotate = this.rotate;
+      // this.options1.yAxis[1].name = "";
+      // this.options1.yAxis[1].axisLabel.formatter = function (a) {
+      //   return [
+      //     `{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}${
+      //       that.unitSystem.unit
+      //     }}`,
+      //   ];
+      // };
+      this.options1.yAxis[1].show = this.Secondaryaxis ? true : false;
+      // if (this.Secondaryaxis) {
+      //   this.options1.series[1].yAxisIndex = 1;
+
+      //   // this.options1.series.forEach(x => {
+      //   //   x.name == this.Secondaryaxis ? x.yAxisIndex = 1 : null
+      //   // })
+      // }
+      this.options1.series[0].barWidth = this.borederWidth;
+      this.options1.series[1].barWidth = this.borederWidth;
+
     },
     pjzFn(arr) {
       var ret = 0;
