@@ -753,22 +753,9 @@ export default {
     this.options1.legend.itemWidth = this.legendWidt.width;
     this.options1.legend.itemHeight = this.legendWidt.height;
     this.options1.xAxis.axisLabel.rotate = this.rotate;
-    // this.options1.yAxis[1].name = "";
-    // this.options1.yAxis[1].axisLabel.formatter = function (a) {
-    //   return [
-    //     `{a|${(a / that.unitSystem.multiple).toFixed(that.unitSystem.places)}${
-    //       that.unitSystem.unit
-    //     }}`,
-    //   ];
-    // };
-    this.options1.yAxis[1].show = this.Secondaryaxis ? true : false;
-    // if (this.Secondaryaxis) {
-    //   this.options1.series[1].yAxisIndex = 1;
 
-    //   // this.options1.series.forEach(x => {
-    //   //   x.name == this.Secondaryaxis ? x.yAxisIndex = 1 : null
-    //   // })
-    // }
+    this.options1.yAxis[1].show = this.Secondaryaxis ? true : false;
+
     this.options1.series[0].barWidth = this.borederWidth;
     this.options1.series[1].barWidth = this.borederWidth;
   },
