@@ -108,6 +108,7 @@ export default {
         },
         grid: {
           bottom: 60,
+          left: 65,
         },
         legend: {
           data: [],
@@ -166,6 +167,8 @@ export default {
                 color: "#000",
                 fontFamily: "Microsoft YaHeir",
               },
+
+
             },
             name: "",
             nameTextStyle: {
