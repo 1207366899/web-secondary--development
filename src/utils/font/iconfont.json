@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1380007",
+      "name": "清楚",
+      "font_class": "icon-test",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    }
+  ]
+}

@@ -2,6 +2,10 @@
 node_modules
 /.pnp
 .pnp.js
+
+# testing
+/coverage
+
 # production
 docs-dist
 dist
@@ -10,17 +14,16 @@ es
 lib
 
 # misc
-
 .DS_Store
 pluginTemp/js/*
 **/pluginTemp/js/*.js
 pluginTemp/libs/*
 plugin-*.zip
-
-dumi
-
+temp
 .history
+
 # Editor directories and files
+.umi
 .idea
 .vscode
 *.suo

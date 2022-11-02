@@ -4,16 +4,16 @@ import qs from "querystringify";
 let apiContextPath = "";
 if (process.env.NODE_ENV === "development") {
   document.cookie =
-    "token=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2MzM5NjYwMzU2NiwidXNlcklkIjoiMTIzNDU2Nzg5MCJ9.sOukGYYCJyv3RqLhyk4H4Zf8UwWd1CwMA8mgVALTsE8";
+    "token=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2MzkyNDU1MTg5MSwidXNlcklkIjoiMTIzNDU2Nzg5MCJ9.Pxv4a46KyxA1v5EDFcbD5qias5JwLfkcT1ddFQXil4o";
   document.cookie =
     "refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY0NjcyMjI2ODY4Nn0.TEVE_nopHNZlvSQM_RUZrLcCzkaERiHo8nz0q-ksL3E";
   document.cookie = "username=admin";
   document.cookie = "windowOnline=true";
   apiContextPath = "/api";
 }
-
+const prefix = window.apiContextPathPrefix ? (window.apiContextPathPrefix + "/") : ""
 const instance = axios.create({
-  baseURL: `${apiContextPath}/sdata/rest`,
+  baseURL: `${prefix}${apiContextPath}/sdata/rest`,
   timeout: 60000,
   validateStatus: function (status) {
     return status >= 200 && status < 300; // default
