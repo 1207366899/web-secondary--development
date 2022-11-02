@@ -73,13 +73,30 @@
         content-class-name="my-content"
         >{{ monthTableData.settlementType }}</el-descriptions-item
       >
-      <el-descriptions-item
-        label="费率"
+      <!-- <el-descriptions-item
+        :label="monthTableData.settlementType == '固定电价' ? '电价' : '费率'"
         label-class-name="my-label"
         labelStyle="width:231px;background:#E9F3FD;text-align:center;font-weight:700;color:#000"
         content-class-name="my-content"
         contentStyle="font-weight:400"
         >{{ monthTableData.discountRate ? monthTableData.discountRate + "折" : "" }}</el-descriptions-item
+      >
+    </el-descriptions> -->
+      <el-descriptions-item
+        :label="monthTableData.settlementType == '固定电价' ? '电价' : '费率'"
+        label-class-name="my-label"
+        labelStyle="width:231px;background:#E9F3FD;text-align:center;font-weight:700;color:#000"
+        content-class-name="my-content"
+        contentStyle="font-weight:400"
+        >{{
+          monthTableData.settlementType == "固定电价"
+            ? monthTableData.fixedTariff
+              ? monthTableData.fixedTariff + "元/kWh"
+              : ""
+            : monthTableData.discountRate
+            ? monthTableData.discountRate+'折'
+            : monthTableData.discountRate
+        }}</el-descriptions-item
       >
     </el-descriptions>
     <el-table
@@ -97,22 +114,22 @@
       :cell-style="{ fontWeight: 700 }"
     >
       <el-table-column align="center" prop="date" :label="stateR == 'month' ? '月份' : '年份'" width="231"> </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="powerOutput" :label="stateR == 'month' ? '发电量|(kWh)' : '发电量|(万kWh)'">
+      <el-table-column sortable align="center" :render-header="renderheader" prop="powerOutput" :label="stateR == 'month' ? '发电量|(万kWh)' : '发电量|(万kWh)'">
         <template slot-scope="scope">
           <span>{{ Number(scope.row.powerOutput).toFixed(2) }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="powerOngrid" :label="stateR == 'month' ? '上网电量|(kWh)' : '上网电量|(万kWh)'">
+      <el-table-column sortable align="center" :render-header="renderheader" prop="powerOngrid" :label="stateR == 'month' ? '上网电量|(万kWh)' : '上网电量|(万kWh)'">
         <template slot-scope="scope">
           <span>{{ Number(scope.row.powerOngrid).toFixed(2) }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="powerSelfuse" :label="stateR == 'month' ? '自发自用电量|(kWh)' : '自发自用电量|(万kWh)'">
+      <el-table-column sortable align="center" :render-header="renderheader" prop="powerSelfuse" :label="stateR == 'month' ? '自发自用电量|(万kWh)' : '自发自用电量|(万kWh)'">
         <template slot-scope="scope">
           <span>{{ Number(scope.row.powerSelfuse).toFixed(2) }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="feesSelfuse" :label="stateR == 'month' ? ' 自发自用电费|(元)' : ' 自发自用电费|(万元)'">
+      <el-table-column sortable align="center" :render-header="renderheader" prop="feesSelfuse" :label="stateR == 'month' ? ' 自发自用电费|(万元)' : ' 自发自用电费|(万元)'">
         <template slot-scope="scope">
           <span>{{ Number(scope.row.feesSelfuse).toFixed(2) }}</span>
         </template>
@@ -206,7 +223,6 @@ export default {
     };
   },
   mounted() {
-    //用于注册事件定义，不可删除
     let { componentId } = this.customConfig || {};
     componentId && window.componentCenter?.register(componentId, "comp", this, eventActionDefine);
     let { buttons, id } = this.customConfig;
