@@ -1,11 +1,34 @@
 <template>
   <!-- 定义外层容器标识，宽高百分百 不可删除 -->
-  <div :id="identification" style="width: 100%; height: 100%" :ref="identification">
-    <button :class="{ p_Report: true, active: stateR == 'month' }" @click="reportClick('month')">月报</button>
-    <button :class="{ p_Report: true, active: stateR == 'year' }" @click="reportClick('year')">年报</button>
+  <div
+    :id="identification"
+    style="width: 100%; height: 100%"
+    :ref="identification"
+  >
+    <button
+      :class="{ p_Report: true, active: stateR == 'month' }"
+      @click="reportClick('month')"
+    >
+      月报
+    </button>
+    <button
+      :class="{ p_Report: true, active: stateR == 'year' }"
+      @click="reportClick('year')"
+    >
+      年报
+    </button>
     <div class="topOption">
       <div class="topChoose">
-        <span style="margin-right: 15px; line-height: 32px; margin-top: 15px; font-size: 16px" v-show="stateM">选择月份:</span>
+        <span
+          style="
+            margin-right: 15px;
+            line-height: 32px;
+            margin-top: 15px;
+            font-size: 16px;
+          "
+          v-show="stateM"
+          >选择月份:</span
+        >
         <el-date-picker
           v-show="stateM"
           v-model="monthPickerStart"
@@ -19,7 +42,17 @@
         <div class="iconBox" v-show="stateM">
           <img src="../pluginTemp/images/date.png" alt="" />
         </div>
-        <span v-show="stateM" style="line-height: 32px; margin-left: 15px; margin-right: 15px; margin-top: 15px"> — </span>
+        <span
+          v-show="stateM"
+          style="
+            line-height: 32px;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-top: 15px;
+          "
+        >
+          —
+        </span>
         <el-date-picker
           v-model="monthPickerEnd"
           clear-icon="el-icon-error"
@@ -55,7 +88,11 @@
         labelStyle="width:231px;background:#E9F3FD;text-align:center;font-weight:700;color:#000"
         contentStyle="font-weight:400;background:rgba(249,252,255,1) "
         content-class-name="my-content"
-        >{{ monthTableData.machineVolume ? Number(monthTableData.machineVolume).toFixed(2) + "kWp" : "" }}
+        >{{
+          monthTableData.machineVolume
+            ? Number(monthTableData.machineVolume).toFixed(2) + "kWp"
+            : ""
+        }}
       </el-descriptions-item>
       <el-descriptions-item
         label="用电类型"
@@ -94,7 +131,7 @@
               ? monthTableData.fixedTariff + "元/kWh"
               : ""
             : monthTableData.discountRate
-            ? monthTableData.discountRate+'折'
+            ? monthTableData.discountRate + "折"
             : monthTableData.discountRate
         }}</el-descriptions-item
       >
@@ -113,23 +150,57 @@
       show-summary
       :cell-style="{ fontWeight: 700 }"
     >
-      <el-table-column align="center" prop="date" :label="stateR == 'month' ? '月份' : '年份'" width="231"> </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="powerOutput" :label="stateR == 'month' ? '发电量|(万kWh)' : '发电量|(万kWh)'">
+      <el-table-column
+        align="center"
+        prop="date"
+        :label="stateR == 'month' ? '月份' : '年份'"
+        width="231"
+      >
+      </el-table-column>
+      <el-table-column
+        sortable
+        align="center"
+        :render-header="renderheader"
+        prop="powerOutput"
+        :label="stateR == 'month' ? '发电量|(万kWh)' : '发电量|(万kWh)'"
+      >
         <template slot-scope="scope">
           <span>{{ Number(scope.row.powerOutput).toFixed(2) }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="powerOngrid" :label="stateR == 'month' ? '上网电量|(万kWh)' : '上网电量|(万kWh)'">
+      <el-table-column
+        sortable
+        align="center"
+        :render-header="renderheader"
+        prop="powerOngrid"
+        :label="stateR == 'month' ? '上网电量|(万kWh)' : '上网电量|(万kWh)'"
+      >
         <template slot-scope="scope">
           <span>{{ Number(scope.row.powerOngrid).toFixed(2) }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="powerSelfuse" :label="stateR == 'month' ? '自发自用电量|(万kWh)' : '自发自用电量|(万kWh)'">
+      <el-table-column
+        sortable
+        align="center"
+        :render-header="renderheader"
+        prop="powerSelfuse"
+        :label="
+          stateR == 'month' ? '自发自用电量|(万kWh)' : '自发自用电量|(万kWh)'
+        "
+      >
         <template slot-scope="scope">
           <span>{{ Number(scope.row.powerSelfuse).toFixed(2) }}</span>
         </template>
       </el-table-column>
-      <el-table-column sortable align="center" :render-header="renderheader" prop="feesSelfuse" :label="stateR == 'month' ? ' 自发自用电费|(万元)' : ' 自发自用电费|(万元)'">
+      <el-table-column
+        sortable
+        align="center"
+        :render-header="renderheader"
+        prop="feesSelfuse"
+        :label="
+          stateR == 'month' ? ' 自发自用电费|(万元)' : ' 自发自用电费|(万元)'
+        "
+      >
         <template slot-scope="scope">
           <span>{{ Number(scope.row.feesSelfuse).toFixed(2) }}</span>
         </template>
@@ -207,12 +278,16 @@ export default {
       yearTableData: {},
       pickerOptionsMonth1: {
         disabledDate: (time) => {
-          return this.monthPickerEnd ? time.getTime() > this.monthPickerEnd.getTime() : false;
+          return this.monthPickerEnd
+            ? time.getTime() > this.monthPickerEnd.getTime()
+            : false;
         },
       },
       pickerOptionsMonth2: {
         disabledDate: (time) => {
-          return this.monthPickerStart ? time.getTime() < this.monthPickerStart.getTime() : false;
+          return this.monthPickerStart
+            ? time.getTime() < this.monthPickerStart.getTime()
+            : false;
         },
       },
       stateR: "month",
@@ -224,10 +299,18 @@ export default {
   },
   mounted() {
     let { componentId } = this.customConfig || {};
-    componentId && window.componentCenter?.register(componentId, "comp", this, eventActionDefine);
+    componentId &&
+      window.componentCenter?.register(
+        componentId,
+        "comp",
+        this,
+        eventActionDefine
+      );
     let { buttons, id } = this.customConfig;
     let componentName = this.$vnode.tag.split("-").pop().toLowerCase();
-    this.identification = id ? `secondary_${componentName}_${id}` : `secondary_${componentName}_${utils.generateUUID()}`;
+    this.identification = id
+      ? `secondary_${componentName}_${id}`
+      : `secondary_${componentName}_${utils.generateUUID()}`;
     this.$nextTick(() => {
       let style = `#${this.identification} .el-radio-button__inner:hover{
                       color:${this.theme.themeColor};
@@ -252,13 +335,18 @@ export default {
         value: this.defaultValue,
       });
     }
+
+    this.triggerEvent("componentLoaded");
   },
   methods: {
     monthChange() {
       if (this.monthPickerStart && this.monthPickerEnd) {
         let message = {
           type: "month",
-          date: [this.changeTimeFormat(this.monthPickerStart.getTime()), this.changeTimeFormat(this.monthPickerEnd.getTime())],
+          date: [
+            this.changeTimeFormat(this.monthPickerStart.getTime()),
+            this.changeTimeFormat(this.monthPickerEnd.getTime()),
+          ],
           powerCellId: this.stationId,
         };
         powerCellQuery(message).then((res) => {
@@ -273,7 +361,10 @@ export default {
         this.stateM = true;
         let messageMonth = {
           type: "month",
-          date: [this.monthPickerStart.getFullYear() + "-01", this.monthPickerStart.getFullYear() + "-12"],
+          date: [
+            this.monthPickerStart.getFullYear() + "-01",
+            this.monthPickerStart.getFullYear() + "-12",
+          ],
           powerCellId: this.stationId,
         };
         powerCellQuery(messageMonth).then((res) => {
@@ -293,10 +384,15 @@ export default {
     },
     changeTimeFormat(time) {
       var date = new Date(time);
-      var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-      var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+      var month =
+        date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1;
+      var currentDate =
+        date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
       var hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-      var mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+      var mm =
+        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
       return date.getFullYear() + "-" + month;
       //返回格式：yyyy-MM-dd hh:mm
     },
@@ -331,7 +427,10 @@ export default {
       if (this.stateR == "month") {
         message = {
           type: this.stateR,
-          date: [this.changeTimeFormat(this.monthPickerStart.getTime()), this.changeTimeFormat(this.monthPickerEnd.getTime())],
+          date: [
+            this.changeTimeFormat(this.monthPickerStart.getTime()),
+            this.changeTimeFormat(this.monthPickerEnd.getTime()),
+          ],
           powerCellId: this.stationId,
         };
       } else {
@@ -379,7 +478,9 @@ export default {
         } else if (chr === "%") {
           var asc = zipStr.substring(i + 1, i + 3);
           if (parseInt("0x" + asc) > 0x7f) {
-            uzipStr += decodeURI("%" + asc.toString() + zipStr.substring(i + 3, i + 9).toString());
+            uzipStr += decodeURI(
+              "%" + asc.toString() + zipStr.substring(i + 3, i + 9).toString()
+            );
             i += 8;
           } else {
             uzipStr += this.AsciiToString(parseInt("0x" + asc));
@@ -393,7 +494,11 @@ export default {
     },
     // table表头换行
     renderheader(h, { column, $index }) {
-      return h("span", {}, [h("span", {}, column.label.split("|")[0]), h("br"), h("span", {}, column.label.split("|")[1])]);
+      return h("span", {}, [
+        h("span", {}, column.label.split("|")[0]),
+        h("br"),
+        h("span", {}, column.label.split("|")[1]),
+      ]);
     },
     /**
      * 触发事件 必需，不可删除
@@ -403,7 +508,9 @@ export default {
      */
     triggerEvent(eventName, payload) {
       let { componentId, appId } = this.customConfig || {};
-      componentId && appId && window.eventCenter?.triggerEvent(componentId, eventName, payload);
+      componentId &&
+        appId &&
+        window.eventCenter?.triggerEvent(componentId, eventName, payload);
     },
     //必需，不可删除
     Event_Center_getName() {
@@ -415,7 +522,10 @@ export default {
       this.stationId = value.charcoalId;
       let messageMonth = {
         type: "month",
-        date: [this.monthPickerStart.getFullYear() + "-01", this.monthPickerStart.getFullYear() + "-12"],
+        date: [
+          this.monthPickerStart.getFullYear() + "-01",
+          this.monthPickerStart.getFullYear() + "-12",
+        ],
         powerCellId: this.stationId,
       };
       powerCellQuery(messageMonth).then((res) => {
