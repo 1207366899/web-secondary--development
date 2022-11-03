@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { Button, Radio, DatePicker, ConfigProvider, Table, message } from "antd";
+import {
+  Button,
+  Radio,
+  DatePicker,
+  ConfigProvider,
+  Table,
+  message,
+} from "antd";
 import "moment/locale/zh-cn";
 import "./app.less";
 import zhCN from "antd/lib/locale/zh_CN";
@@ -150,6 +157,11 @@ export default class App extends Component {
         name: "跳转按钮",
         payload: [],
       },
+      {
+        key: "componentLoaded",
+        name: "组件加载完成",
+        payload: [],
+      },
     ];
 
     const actions = [
@@ -159,8 +171,9 @@ export default class App extends Component {
         params: [{ name: "id", dataType: "string", key: "id" }],
       },
     ];
-    this.props?.customConfig?.componentId &&
-      window.componentCenter?.register(this.props?.customConfig?.componentId, "", this, {
+    const { customConfig: { componentId } = {} } = this.props || {};
+    componentId &&
+      window.componentCenter?.register(componentId, "", this, {
         events,
         actions,
       });
@@ -182,7 +195,11 @@ export default class App extends Component {
     //     actions,
     //   }
     // );
-    console.log(document.getElementsByClassName("ant-picker-input")[0].innerHTML);
+    console.log(
+      document.getElementsByClassName("ant-picker-input")[0].innerHTML
+    );
+
+    window?.eventCenter?.triggerEvent(componentId, "componentLoaded");
   }
   state = {
     id: undefined,
@@ -271,14 +288,14 @@ export default class App extends Component {
   onSecondDatePickerChange = (value) => {
     this.setState({ secondDate: value }, () => this.queryData()); // 查询方法
   };
-  disabledStartDate = (firstDate ) => {
+  disabledStartDate = (firstDate) => {
     const { secondDate } = this.state;
     if (!firstDate || !secondDate) {
       return false;
     }
     return firstDate.valueOf() > secondDate.valueOf();
   };
-  disabledEndDate = (secondDate ) => {
+  disabledEndDate = (secondDate) => {
     const { firstDate } = this.state;
     if (!secondDate || !firstDate) {
       return false;
@@ -340,7 +357,12 @@ export default class App extends Component {
       <ConfigProvider locale={zhCN}>
         <div className="allContent" style={{ margin: 8 }}>
           <div className="tabs">
-            <Radio.Group options={options} onChange={this.onChangeTabValue} value={tabValue} optionType="button" />
+            <Radio.Group
+              options={options}
+              onChange={this.onChangeTabValue}
+              value={tabValue}
+              optionType="button"
+            />
           </div>
           <div className="fitlersAndExport">
             {tabValue === "month" && (
@@ -354,19 +376,39 @@ export default class App extends Component {
                   picker="month"
                   onChange={(e) => this.onFirstDatePickerChange(e)}
                 />{" "}
-                <img src={require("./日期标准.png").default} className="riliIcon1"></img>
+                <img
+                  src={require("./日期标准.png").default}
+                  className="riliIcon1"
+                ></img>
                 <span style={{ margin: "0px 4px" }}>&nbsp;—&nbsp;</span>{" "}
-                <DatePicker value={secondDate} picker="month" disabledDate={this.disabledEndDate} onChange={(e) => this.onSecondDatePickerChange(e)} />
-                <img src={require("./日期标准.png").default} className="riliIcon2"></img>
+                <DatePicker
+                  value={secondDate}
+                  picker="month"
+                  disabledDate={this.disabledEndDate}
+                  onChange={(e) => this.onSecondDatePickerChange(e)}
+                />
+                <img
+                  src={require("./日期标准.png").default}
+                  className="riliIcon2"
+                ></img>
               </div>
             )}
 
             <div className="exportButton">
-              <img src={require("./export.png").default} onClick={this.onExportClick} style={{ cursor: "pointer" }}></img>
+              <img
+                src={require("./export.png").default}
+                onClick={this.onExportClick}
+                style={{ cursor: "pointer" }}
+              ></img>
             </div>
           </div>
           <div className="tableContent">
-            <Table columns={tabValue === "month" ? monthColumns : yearColumns} dataSource={dataSource} bordered title={(data) => this.titleRenderer(data)} />
+            <Table
+              columns={tabValue === "month" ? monthColumns : yearColumns}
+              dataSource={dataSource}
+              bordered
+              title={(data) => this.titleRenderer(data)}
+            />
           </div>
         </div>
       </ConfigProvider>
