@@ -1,6 +1,10 @@
 // 组件可派发事件
 export const events = [
-
+  {
+    key: "componentLoaded",
+    name: "组件加载完成",
+    payload: [],
+  },
 ];
 
 // 组件可接收事件
@@ -24,9 +28,7 @@ export const actions = [
         dataType: "string",
       },
     ],
-  }
-
-
+  },
 ];
 
 export default {
