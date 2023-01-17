@@ -10,12 +10,12 @@ const sourceMap = args.source || true;
 
 function printZip(zip) {
   let zipEntries = zip.getEntries(); // an array of ZipEntry records
-  zipEntries.forEach(function(zipEntry) {
+  zipEntries.forEach(function (zipEntry) {
     console.log(zipEntry.name || zipEntry.entryName); // outputs zip entries information
   });
 }
 
-Date.prototype.Format = function(fmt) {
+Date.prototype.Format = function (fmt) {
   var o = {
     "M+": this.getMonth() + 1, //月份
     "d+": this.getDate(), //日
@@ -23,21 +23,26 @@ Date.prototype.Format = function(fmt) {
     "m+": this.getMinutes(), //分
     "s+": this.getSeconds(), //秒
     "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-    "S": this.getMilliseconds() //毫秒
+    S: this.getMilliseconds(), //毫秒
   };
-  if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  if (/(y+)/.test(fmt))
+    fmt = fmt.replace(
+      RegExp.$1,
+      (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+    );
   for (var k in o) {
     if (new RegExp("(" + k + ")").test(fmt)) {
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1)
-                                   ? (o[k])
-                                   : (("00" + o[k]).substr(("" + o[k]).length)));
+      fmt = fmt.replace(
+        RegExp.$1,
+        RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length)
+      );
     }
   }
   return fmt;
 };
 let configJson = require("../pluginTemp/config.json");
 // 删除老的文件
-glob.sync(path.resolve(__dirname, "../pluginTemp/js/*")).map(file => {
+glob.sync(path.resolve(__dirname, "../pluginTemp/js/*")).map((file) => {
   console.log("file:", file);
   fs.removeSync(file);
 });
@@ -77,12 +82,17 @@ console.log("config.json 修改完成", configJson);
 console.log("打包中...");
 
 const requirementNumber = configJson["requirement-number"];
-const requirementName = (configJson["requirement-name"] == "需求名称") ? "" : `${configJson["requirement-name"]}-`;
+const requirementName =
+  configJson["requirement-name"] == "需求名称"
+    ? ""
+    : `${configJson["requirement-name"]}-`;
 let zip = new AdmZip();
 zip.addLocalFolder(path.resolve(__dirname, "../pluginTemp"));
 let pluginPath = path.resolve(
   __dirname,
-  `../plugin-${requirementNumber}-${requirementName}${new Date().Format("yyyy年MM月dd日 HH时mm分")}.zip`
+  `../${requirementNumber}-${requirementName}${new Date().Format(
+    "yyyy年MM月dd日 HH时mm分"
+  )}.zip`
 );
 zip.writeZip(pluginPath);
 fs.writeFileSync(path.resolve(__dirname, "../temp"), pluginPath, "utf-8");
