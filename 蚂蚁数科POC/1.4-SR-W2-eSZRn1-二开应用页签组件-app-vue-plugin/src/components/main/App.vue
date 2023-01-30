@@ -1,6 +1,6 @@
 <template>
   <div :id="id" ref="app-secondary" class="app-secondary">
-    <el-tabs tab-position="left" :stretch="true" class="tab_two" @tab-click="testFn" style="height: 460px;">
+    <el-tabs tab-position="left" :stretch="true" class="tab_two" @tab-click="testFn" >
       <el-tab-pane v-for="(item, i) in jqReports" :key="i">
         <div slot="label" class="two_label">
           <div class="label_title">
@@ -116,34 +116,34 @@ export default {
         // x[this.videoField] = x[this.videoField] && JSON.parse(x[this.videoField])[0]?.url
         // if (x[this.imgField]) tempData.push(x)
       })
-
+      tempData=JSON.parse(JSON.stringify(this.jqReports))
 
       tempData.sort((a, b) => {
         return new Date(b.create_time) - new Date(a.create_time)
       })
-      // this.jqReports = tempData.splice(0, 5)
+      this.jqReports = tempData.splice(0, 4)
       console.log(this.jqReports, '1==============lunb');
     })
-    this.$nextTick(() => {
-      let a = document.querySelector('.test')
-      let b = document.querySelector('.el-tabs__active-bar')
-      let c = document.querySelector('.el-tabs__nav')
+    // this.$nextTick(() => {
+    //   let a = document.querySelector('.test')
+    //   let b = document.querySelector('.el-tabs__active-bar')
+    //   let c = document.querySelector('.el-tabs__nav')
 
-      let hei = b.clientHeight
-      console.log(hei, a, '======dome');
-      c.appendChild(a)
-    })
+    //   let hei = b.clientHeight
+    //   console.log(hei, a, '======dome');
+    //   c.appendChild(a)
+    // })
   },
   methods: {
     testFn() {
-      this.$nextTick(() => {
-        let a = document.querySelector('.test')
-        let b = document.querySelector('.el-tabs__active-bar')
-        let hei = b.clientHeight / 2 - 8
-        let trans = Number(b.style.transform.replace('translateY', '').replace('(', '').replace(')', '').replace('px', '')) + hei
-        a.style.transform = `translateY(${trans}px)`
-        console.log(b, b.style.transform, hei, trans, '======dome');
-      })
+      // this.$nextTick(() => {
+      //   let a = document.querySelector('.test')
+      //   let b = document.querySelector('.el-tabs__active-bar')
+      //   let hei = b.clientHeight / 2 - 8
+      //   let trans = Number(b.style.transform.replace('translateY', '').replace('(', '').replace(')', '').replace('px', '')) + hei
+      //   a.style.transform = `translateY(${trans}px)`
+      //   console.log(b, b.style.transform, hei, trans, '======dome');
+      // })
 
     },
     Processing(arr) {
@@ -190,6 +190,23 @@ export default {
 .app-secondary {
   /deep/.el-tabs__active-bar {
     background-color: #274ea7;
+    width: 3px;
+    // background-image: url('../../api/image/jiantou.png');
+    // background-repeat: no-repeat;
+    &::before{
+      content: '';
+      // border: 8px solid transparent;
+      background: url('../../api/image/jiantou.png') no-repeat;
+    // border-left-color: #274ea7;
+    width: 24px;
+    height: 80px;
+    position: absolute;
+    right: -21px;
+    left: auto;
+    top: 0;
+    bottom: auto;
+    transform: translateY(21px);
+    }
   }
 
   /deep/.el-tabs__nav-scroll {
@@ -200,16 +217,9 @@ export default {
     overflow: visible;
   }
 
-  // /deep/.el-tabs__active-bar::after {
-  //   border: 8px solid transparent;
-  //   border-left-color: #274ea7;
-  //   position: absolute;
-  //   right: -16px;
-  //   left: auto;
-  //   top: 0;
-  //   bottom: auto;
-  //   transform: translateY(21px);
-  // }
+  /deep/.el-tabs__active-bar::after {
+   
+  }
   /deep/.el-tabs__item {
     &:hover {
       color: #274ea7;
@@ -226,20 +236,26 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 190px;
+      // width: 190px;
 
       .label_title_label {
         font-weight: 700;
+        font-size: 18px;
+        line-height: 34px;
         padding: 5px 0;
       }
 
       .label_title_text {
         min-width: 130px;
+        line-height: 25px;
+        font-size: 14px;
       }
 
       .label_icon {
+        margin-left: 28px;
+    margin-right: 18px;
         .anticon {
-          font-size: 32px !important;
+          font-size: 54px !important;
 
           &:hover {
             color: #274ea7;
@@ -268,11 +284,11 @@ export default {
       height: auto;
       line-height: 1;
       min-height: 40px;
-      padding: 10px 20px;
+      padding: 22px 20px;
     }
 
     .tab_content_two {
-      padding: 20px;
+      padding: 0 20px;
       padding-left: 35px;
 
       .two_content {
@@ -280,11 +296,12 @@ export default {
         border-radius: 5px;
         background: #fff;
         display: flex;
-        min-height: 400px;
-        padding: 15px;
-
+        // min-height: 400px;
+        padding: 52px  66px;
+        box-shadow: 0px 10px 20px rgba(3, 71, 204, 0.1);
+border-radius: 8px;
         .two_content_right {
-          padding: 0 15px 15px 15px;
+          padding: 0 0px 0px 42px;
           box-sizing: content-box;
           flex: 1;
 
@@ -294,29 +311,42 @@ export default {
 
             .content_title_two {
               font-weight: 700;
+              font-size: 24px;
+            }
+            /deep/.el-tag--warning{
+              background: rgba(227, 126, 94, 0.12);
+              color: #E37E5E;
+              padding: 0 20px;
             }
           }
 
 
           .content_right_top {
             .content_right_content {
-              padding: 15px 0;
-              border-bottom: 1px solid rgb(224, 224, 224);
+              padding: 20px 0 40px 0;
+              border-bottom: 2px solid rgb(224, 224, 224);
+              color: #626973;
+              font-size: 16px;
+line-height: 22px;
             }
           }
 
           .content_right_bottom {
-            padding-top: 20px;
+            padding-top: 40px;
 
             .content_bottom_itme {
               display: flex;
-
+              // padding-bottom: 8px;
               .content_bottom_itme_title {
                 min-width: 130px;
+                color: #959CA6;
+                font-size: 18px;
+                line-height: 32px;
               }
-
               .content_bottom_itme_content {
                 color: #274ea7;
+                font-size: 18px;
+                line-height: 32px;
               }
             }
           }
@@ -326,7 +356,8 @@ export default {
     }
 
     .two_content_left {
-      width: 200px;
+      width: 310px;
+      height: 392px;
     }
   }
 
@@ -340,6 +371,8 @@ export default {
     bottom: auto;
     transform: translateY(21px);
   }
-
+/deep/.el-tabs--left .el-tabs__nav-wrap.is-left::after, .el-tabs--left .el-tabs__nav-wrap.is-right::after, .el-tabs--right .el-tabs__nav-wrap.is-left::after, .el-tabs--right .el-tabs__nav-wrap.is-right::after{
+  height: 492px;
+}
 }
 </style>

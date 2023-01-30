@@ -1,0 +1,14 @@
+{
+  "id": "1536dddc-68d1-44b0-bead-db448224e70b",
+  "type": "list-custom-btn",
+  "main": "main.4a70ab84.js",
+  "version": "2",
+  "props": {
+    "styleArr": "[\"title\",\"height\",\"key\", \"eventCenterConfig\"]",
+    "columnStyle": "{title:'自定义'}",
+    "componentAttributes": "{\"style\":[\"title\",\"height\"],\"data\":[\"key\"],\"interaction\":[\"eventCenterConfig\"]}",
+    "assetColumnList": "[{\"col_name\":\"自定义\",\"col_datatype\":0}]"
+  },
+  "requirement-number": "SR-W3-NjRySh",
+  "requirement-name": "日程安排批量导入"
+}

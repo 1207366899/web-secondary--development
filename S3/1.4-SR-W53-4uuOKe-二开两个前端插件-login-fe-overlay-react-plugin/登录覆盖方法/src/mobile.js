@@ -185,6 +185,11 @@ const App = props => {
     const cancel = e => {
         e.stopPropagation();
         setShowInfo(false);
+        if (inviteUrlStatus) {
+            loginAfter();
+        } else {
+            getAfterGetToken(afterLoginData.token, loginParams.password);
+        }
     };
 
     return (

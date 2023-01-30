@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+# production
+docs-dist
+dist
+build
+es
+lib
+
+# misc
+
+.DS_Store
+pluginTemp/js/*
+**/pluginTemp/js/*.js
+pluginTemp/libs/*
+plugin-*.zip
+
+
+.history
+# Editor directories and files
+.umi
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

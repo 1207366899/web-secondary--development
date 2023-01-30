@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "utils/*": ["src/utils/*"],
+      "service/*": ["src/service/*"],
+      "components/*": ["src/components/*"],
+      "@/*": ["src/*"]
+    },
+    "outDir": "./dist",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "esNext"
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "packages/deps/compiled/webpack",
+    "**/*.spec.ts",
+    "lib",
+    "loadable.js",
+    "proxy.js",
+    "fixtures",
+    "examples"
+  ],
+  "include": ["src", "types"]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "df4df956-bbab-4d89-93c4-f6603bb9efjk",
+  "type": "application-global-config",
+  "main": "main.b5b2a70f.js",
+  "version": "2",
+  "props": {
+    "type": "customize",
+    "img": "APP_0001.png",
+    "name": "dsadq",
+    "loadStyle": 0,
+    "lib": [],
+    "css_script": [],
+    "customconf": [
+      "modelId",
+      "intervalTime",
+      "duration",
+      "visibleID",
+      "styleJosn"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+.tranfer-table-filter-modal .ant-col {
+  line-height: 32px;
+}
+.tranfer-table-filter-modal .json-content {
+  max-height: 400px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+.tranfer-table-filter-modal .btn-container {
+  text-align: right;
+}
+.exportEX .ant-upload-list {
+  display: none !important;
+}
+.exportEX .ant-input[disabled] {
+  background-color: #ffff !important;
+}

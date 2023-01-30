@@ -48,6 +48,7 @@ export default {
     customConfig: Object
   },
   mounted() {
+    console.log('======配置项页', this.customConfig);
     this.assetId = this.customConfig?.assetId
     this.assetId && this.queryContent()
     this.tab_icon = this.customConfig?.tab_icon

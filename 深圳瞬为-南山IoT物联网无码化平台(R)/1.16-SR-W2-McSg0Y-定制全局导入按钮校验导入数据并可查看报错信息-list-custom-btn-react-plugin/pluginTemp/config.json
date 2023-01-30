@@ -1,0 +1,14 @@
+{
+  "id": "dbf3eee1-0e18-411f-881b-7ee12134ee85",
+  "type": "list-custom-btn",
+  "main": "main.1f4df5a3.js",
+  "version": "2",
+  "props": {
+    "styleArr": "[\"title\",\"height\",\"key\", \"eventCenterConfig\"]",
+    "columnStyle": "{title:'自定义'}",
+    "componentAttributes": "{\"style\":[\"title\",\"height\"],\"data\":[\"key\"],\"interaction\":[\"eventCenterConfig\"]}",
+    "assetColumnList": "[{\"col_name\":\"自定义\",\"col_datatype\":0}]"
+  },
+  "requirement-number": "SR-W2-McSg0Y",
+  "requirement-name": "定制全局导入按钮"
+}

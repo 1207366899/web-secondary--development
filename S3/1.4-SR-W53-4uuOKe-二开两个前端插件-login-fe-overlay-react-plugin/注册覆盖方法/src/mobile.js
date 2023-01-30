@@ -172,6 +172,7 @@ const App = props => {
     const cancel = e => {
         e.stopPropagation();
         setShowInfo(false);
+        loginAfter();
     };
 
     return (
