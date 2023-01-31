@@ -1,0 +1,150 @@
+.outermast {
+   width: 100%;
+   height: 100%;
+   // height: 560px;
+   padding: 0 0.6% 0 1.7%;
+   background-size: 100% 100%;
+   position: relative;
+   margin-left: -1px;
+   // 标题
+   .gis_title {
+      font-size: 18px;
+      color: rgb(21, 246, 238);
+      font-weight: bolder;
+      width: 200px;
+      padding: 8px 0 10px 5px;
+      div {
+         margin-left: 8%;
+      }
+      img {
+         position: absolute;
+         padding-top: 6px;
+         width: 15px;
+         height: 15px;
+      }
+   }
+   // 区域选择
+   .area_select {
+      width: 100%;
+      text-align: right;
+      margin-bottom: 10px;
+      margin-left: 7px;
+      .el-select {
+         width: 115px;
+         box-sizing: border-box;
+      }
+      .el-input__inner {
+         color: #c9edff;
+         background: transparent;
+         border: 1px solid #1a5b85;
+      }
+   }
+   // 介绍
+   .git_introduce {
+      position: absolute;
+      width: 98.7%;
+      height: 15%;
+      background: url("../../assets/服务区bg.png") no-repeat;
+      background-size: 100% 100%;
+      // 图文介绍-文字
+      .introduce_text {
+         padding: 5px 14px 0 16px;
+         width: 100%;
+         height: 100%;
+         box-sizing: border-box;
+         font-size: 14px;
+         display: -webkit-box;
+         overflow: hidden;
+         -webkit-box-orient: vertical;
+         line-clamp: 3;
+         -webkit-line-clamp: 3;
+         color: #bee2f4;
+         .text_title {
+            display: inline;
+            color: #0ce1df;
+         }
+      }
+   }
+   // 地图
+   .gis_map {
+      width: 100%;
+      height: 66%;
+      position: relative;
+      top: 17.5%;
+      left: 0.6%;
+      box-sizing: border-box;
+      // 地图大小
+      #mapContent {
+         width: 100%;
+         height: 100%;
+      }
+      // 总览按钮
+      .overview_button {
+         z-index: 5;
+         position: absolute;
+         top: 2.5%;
+         right: 2%;
+         .el-button {
+            color: #c9edff;
+            background: transparent;
+            border: 1px solid #2185bc;
+         }
+      }
+   }
+   // 轮播图
+   .gis_swiper {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      overflow: hidden;
+      .swiper-container {
+         width: 100%;
+         height: 100%;
+         img {
+            width: 100%;
+            height: 100%;
+         }
+      }
+   }
+   // 地图图标
+   .mapContent_img {
+      img:first-child {
+         z-index: 5;
+         position: absolute;
+         top: 0;
+         left: 0;
+         height: 17px;
+      }
+      img:last-child {
+         z-index: 5;
+         position: absolute;
+         bottom: 0;
+         right: 0;
+         height: 17px;
+      }
+   }
+   // 弹窗
+   .map_infoWindow {
+      position: absolute;
+      top: 0;
+      color: #fff;
+      width: 130px;
+      padding: 8px;
+      box-sizing: border-box;
+      background: #030d18cc;
+      backdrop-filter: blur(4px);
+      font-size: 14px;
+      text-align: center;
+      border: 1px solid #2185bc;
+   }
+   // 去除地图logo
+   .amap-logo,
+   .amap-copyright {
+      display: none !important;
+   }
+}
+
+.el-card__body {
+   background: #01031a;
+}
