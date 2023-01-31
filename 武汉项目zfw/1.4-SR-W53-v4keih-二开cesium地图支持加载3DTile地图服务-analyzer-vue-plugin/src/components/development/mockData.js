@@ -183,6 +183,12 @@ export const mockCustomConfig = {
           column: "销售额",
         },
       ],
+      showCondition: [
+        {
+          value: "南京市",
+          column: "城市",
+        },
+      ],
       name: "点位详情",
       backgroundList: [],
       imgList: [

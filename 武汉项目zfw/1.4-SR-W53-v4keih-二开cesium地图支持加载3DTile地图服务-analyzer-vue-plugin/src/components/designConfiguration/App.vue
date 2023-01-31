@@ -181,6 +181,56 @@
               <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
             </el-upload>
           </el-form-item>
+
+          <el-form-item label="条件设置:" label-width="80" prop="showCondition">
+            <el-row
+              v-for="(item, index) in pointForm.showCondition"
+              :key="index"
+              :gutter="10"
+              :style="{
+                display: 'inline-block',
+                width: '100%',
+              }"
+            >
+              <el-col :span="8">
+                <el-select
+                  style="width: 100%"
+                  v-model="item.column"
+                  placeholder="请选择字段"
+                >
+                  <el-option
+                    v-for="(items, inse) in selectKey"
+                    :key="inse"
+                    :label="items.column"
+                    :value="items.column"
+                    >{{ items.column }}</el-option
+                  >
+                </el-select>
+              </el-col>
+              <el-col :span="4">
+                <el-select value="等于" style="width: 100%">
+                  <el-option value="等于">等于</el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="8">
+                <el-input v-model="item.value" placeholder="固定值" clearable />
+              </el-col>
+              <el-col :span="4">
+                <i
+                  class="el-icon-delete"
+                  :style="{ cursor: 'pointer' }"
+                  @click="
+                    modalTableColumnChange('DELETE', index, 'showCondition')
+                  "
+                ></i>
+              </el-col>
+            </el-row>
+            <el-button
+              :style="{ width: '100%' }"
+              @click="modalTableColumnChange('ADD', '', 'showCondition')"
+              >添加</el-button
+            >
+          </el-form-item>
           <el-row :gutter="10">
             <el-col :span="12">
               <el-form-item label="宽度:" label-width="80" prop="modalWidth">
@@ -245,7 +295,7 @@
                   autocomplete="off"
                   clearable
                   :style="{ width: '100%' }"
-                  min="0"
+                  :min="0"
                 ></el-input-number
               ></el-col>
               <el-col :span="4">
@@ -288,6 +338,7 @@ import {
   InputNumber,
 } from "element-ui";
 import Vue from "vue";
+import { cloneDeep } from "lodash";
 
 Vue.use(Input);
 Vue.use(Button);
@@ -335,6 +386,7 @@ export default {
         modalHeight: 700,
         modalTitle: "点位详情",
         modalTableColumn: [],
+        showCondition: [],
       },
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],
@@ -542,16 +594,19 @@ export default {
       }
       this.$refs[formName].resetFields();
     },
-    modalTableColumnChange(type, index) {
+    modalTableColumnChange(type, index, objName = "modalTableColumn") {
+      let list = this.pointForm[objName] || [];
       switch (type) {
         case "ADD":
-          this.pointForm.modalTableColumn.push({});
+          list.push({});
           break;
         case "DELETE":
-          this.pointForm.modalTableColumn.splice(index, 1);
+          list.splice(index, 1);
         default:
           break;
       }
+      this.pointForm[objName] = cloneDeep(list);
+      this.$forceUpdate();
     },
   },
 };

@@ -396,13 +396,33 @@ export default {
       // console.log("this.POICollection", this.POICollection);
       // 图层列表
       this.pointListApp.forEach((item, index) => {
-        let imgUrl = item.imgList[0]?.url;
-        let { LongitudeKey, LatitudeKey, name } = item;
+        let {
+          LongitudeKey,
+          LatitudeKey,
+          name,
+          imgList = [],
+          showCondition = [],
+        } = item;
+        let imgUrl = imgList[0]?.url;
         // console.log('imgUrl', imgUrl);
         const dataSource = new Cesium.CustomDataSource(name);
 
+        // 条件设值点位过滤
+        let points = this.POICollection || [];
+        if (showCondition.length) {
+          points = this.POICollection.filter((item) => {
+            let check = true;
+            showCondition.forEach((rule) => {
+              const { column, value } = rule || {};
+              if (column && item[column] !== value) {
+                check = false;
+              }
+            });
+            return check;
+          });
+        }
         // 分析仪数据
-        this.POICollection.forEach((point) => {
+        points.forEach((point) => {
           dataSource.entities.add({
             position: Cesium.Cartesian3.fromDegrees(
               point[LongitudeKey],
@@ -508,8 +528,11 @@ export default {
           }
         });
 
+        // 点位图层默认为不展示
+        // this.checkList.push(name);
+        dataSource.show = false;
+
         this.viewer.dataSources.add(dataSource);
-        this.checkList.push(name);
       });
 
       // 点击弹窗
