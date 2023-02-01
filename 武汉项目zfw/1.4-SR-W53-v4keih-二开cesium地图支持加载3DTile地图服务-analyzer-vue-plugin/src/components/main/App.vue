@@ -13,7 +13,14 @@
           v-for="(item, index) in pointListApp"
           :label="item.name"
           :key="index"
-        ></el-checkbox>
+        >
+          <span class="check-lebel" :title="item.name">{{ item.name }}</span>
+          <img
+            v-if="item.imgList[0]?.url"
+            :src="item.imgList[0]?.url"
+            class="check-icon"
+          />
+        </el-checkbox>
       </el-checkbox-group>
     </div>
     <el-dialog
@@ -783,12 +790,26 @@ export default {
   top: 0;
   right: 0;
   z-index: 1;
-  width: 100px;
+  width: 120px;
   background: rgba(0, 0, 0, 0.3);
   padding: 10px;
   margin: 10px;
   .el-checkbox__label {
     color: #fff;
   }
+}
+.check-lebel {
+  width: 70px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+.check-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  vertical-align: middle;
 }
 </style>

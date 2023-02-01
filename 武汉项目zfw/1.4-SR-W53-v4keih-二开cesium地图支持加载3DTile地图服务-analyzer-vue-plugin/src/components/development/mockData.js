@@ -200,6 +200,47 @@ export const mockCustomConfig = {
         },
       ],
     },
+    {
+      modalWidth: 1400,
+      modalHeight: 700,
+      LongitudeKey: "经度",
+      LatitudeKey: "纬度",
+      modalTitle: "A",
+      modalTableColumn: [
+        {
+          width: 100,
+          column: "城市",
+        },
+        {
+          width: 100,
+          column: "种类",
+        },
+        {
+          width: 100,
+          column: "利润",
+        },
+        {
+          width: 100,
+          column: "销售额",
+        },
+      ],
+      showCondition: [
+        {
+          value: "南京市",
+          column: "城市",
+        },
+      ],
+      name: "点位详情2点位详情2点位详情2点位详情2",
+      backgroundList: [],
+      imgList: [
+        {
+          uid: 1673251946982,
+          name: "custom_table.png",
+          url: "/storage_area/form/1234567890/7f81d4c20ff6420a911cdb1e4609862d.png",
+          status: "success",
+        },
+      ],
+    },
   ],
   ServerImageryProvider:
     "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
