@@ -525,6 +525,8 @@ export default {
         cluster.billboard.show = true;
         cluster.billboard.width = 48;
         cluster.billboard.height = 72;
+
+        cluster.billboard._clusteredEntities = clusteredEntities;
         // cluster.billboard.eyeOffset = new Cesium.Cartesian3(0, 0, 1)
         // cluster.billboard.image = _that.combineIconAndLabel(
         //   len >= 50 ? red3d : len >= 10 ? yellow3d : green3d,
@@ -549,7 +551,8 @@ export default {
       this.handler.setInputAction(function (event) {
         const pickedLabel = _that.viewer.scene.pick(event.position);
         if (Cesium.defined(pickedLabel)) {
-          const ids = pickedLabel.id;
+          const { id, primitive: { _clusteredEntities } = {} } = pickedLabel;
+          const ids = id || _clusteredEntities;
           if (!ids) return;
           let pointIndex = ids._pointIndex || 0;
           let pointData = [{ ...ids._data, _index: 1 }];
